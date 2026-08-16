@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  --nexora-green: #10b981;
+  --nexora-teal: #0d9488;
+  --nexora-dark: #0f172a;
+  --nexora-card: #1e293b;
+  --nexora-border: #334155;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background-color: var(--nexora-dark); color: #f1f5f9; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+.leaflet-container { height: 100%; width: 100%; border-radius: 12px; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--nexora-dark); }
+::-webkit-scrollbar-thumb { background: var(--nexora-border); border-radius: 3px; }
+@keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 50% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); } }
+.animate-slide-up { animation: slide-up 0.4s ease forwards; }
+.animate-pulse-glow { animation: pulse-glow 2s infinite; }
+.glass { background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(51, 65, 85, 0.6); }
+.btn-primary { background: linear-gradient(135deg, #10b981, #0d9488); color: white; padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.card { background: var(--nexora-card); border: 1px solid var(--nexora-border); border-radius: 16px; padding: 20px; }
+.input { width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--nexora-border); border-radius: 10px; padding: 12px 16px; color: #f1f5f9; font-size: 16px; outline: none; transition: border-color 0.2s; }
+.input:focus { border-color: var(--nexora-green); }
+.input::placeholder { color: #64748b; }
+.badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: capitalize; }
+.badge-wet { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+.badge-dry { background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+.badge-recyclable { background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+.badge-hazardous { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }

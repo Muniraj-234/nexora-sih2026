@@ -1,0 +1,198 @@
+import { useState, useEffect } from 'react'
+import { supabase } from '../lib/supabase'
+import {
+  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
+  Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend
+} from 'recharts'
+import { BarChart2, TrendingUp, Recycle } from 'lucide-react'
+
+const WASTE_COLORS = {
+  wet: '#60a5fa',
+  dry: '#fbbf24',
+  recyclable: '#34d399',
+  hazardous: '#f87171',
+}
+
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 10, padding: '10px 14px' }}>
+        <p style={{ color: '#94a3b8', fontSize: 12, marginBottom: 4 }}>{label}</p>
+        {payload.map(p => (
+          <p key={p.name} style={{ color: p.color, fontSize: 13, fontWeight: 600 }}>
+            {p.name}: {p.value}
+          </p>
+        ))}
+      </div>
+    )
+  }
+  return null
+}
+
+export default function Analytics() {
+  const [dailyData, setDailyData] = useState([])
+  const [wasteTypePie, setWasteTypePie] = useState([])
+  const [binFillData, setBinFillData] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [totalCollections, setTotalCollections] = useState(0)
+
+  useEffect(() => { fetchAnalytics() }, [])
+
+  async function fetchAnalytics() {
+    setLoading(true)
+
+    // Collections over last 7 days
+    const days = []
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date()
+      d.setDate(d.getDate() - i)
+      days.push(d)
+    }
+
+    const dailyPromises = days.map(async (day) => {
+      const start = new Date(day)
+      start.setHours(0, 0, 0, 0)
+      const end = new Date(day)
+      end.setHours(23, 59, 59, 999)
+
+      const { count } = await supabase
+        .from('collections_log')
+        .select('*', { count: 'exact', head: true })
+        .gte('timestamp', start.toISOString())
+        .lte('timestamp', end.toISOString())
+
+      return {
+        day: day.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric' }),
+        collections: count || 0,
+      }
+    })
+
+    const daily = await Promise.all(dailyPromises)
+    setDailyData(daily)
+    setTotalCollections(daily.reduce((a, b) => a + b.collections, 0))
+
+    // Waste type breakdown
+    const { data: logs } = await supabase.from('collections_log').select('waste_type')
+    const typeCounts = {}
+    ;(logs || []).forEach(log => {
+      const t = log.waste_type || 'unknown'
+      typeCounts[t] = (typeCounts[t] || 0) + 1
+    })
+    setWasteTypePie(
+      Object.entries(typeCounts).map(([name, value]) => ({ name, value }))
+    )
+
+    // Bin fill level distribution
+    const { data: bins } = await supabase.from('bins').select('fill_level, type')
+    const fillRanges = [
+      { range: '0–25%', count: 0 },
+      { range: '26–50%', count: 0 },
+      { range: '51–75%', count: 0 },
+      { range: '76–100%', count: 0 },
+    ]
+    ;(bins || []).forEach(bin => {
+      if (bin.fill_level <= 25) fillRanges[0].count++
+      else if (bin.fill_level <= 50) fillRanges[1].count++
+      else if (bin.fill_level <= 75) fillRanges[2].count++
+      else fillRanges[3].count++
+    })
+    setBinFillData(fillRanges)
+
+    setLoading(false)
+  }
+
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-64">
+      <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+
+  return (
+    <div className="max-w-5xl mx-auto">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-white">Analytics</h1>
+        <p className="text-slate-400 text-sm mt-1">Collection performance · Last 7 days</p>
+      </div>
+
+      {/* KPI cards */}
+      <div className="grid grid-cols-3 gap-3 mb-8">
+        {[
+          { label: 'Collections (7d)', value: totalCollections, icon: BarChart2, color: '#10b981' },
+          { label: 'Avg/Day', value: Math.round(totalCollections / 7), icon: TrendingUp, color: '#60a5fa' },
+          { label: 'Waste Types', value: wasteTypePie.length, icon: Recycle, color: '#a78bfa' },
+        ].map(kpi => {
+          const Icon = kpi.icon
+          return (
+            <div key={kpi.label} className="card">
+              <Icon size={20} style={{ color: kpi.color }} className="mb-3" />
+              <div className="text-2xl font-bold text-white">{kpi.value}</div>
+              <div className="text-xs text-slate-400 mt-1">{kpi.label}</div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Collections over time */}
+      <div className="card mb-5">
+        <h2 className="font-semibold text-white mb-1">Collections Over Time</h2>
+        <p className="text-xs text-slate-400 mb-4">Daily collections in the last 7 days</p>
+        <ResponsiveContainer width="100%" height={200}>
+          <LineChart data={dailyData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+            <XAxis dataKey="day" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
+            <Tooltip content={<CustomTooltip />} />
+            <Line
+              type="monotone" dataKey="collections" name="Collections"
+              stroke="#10b981" strokeWidth={2.5} dot={{ fill: '#10b981', strokeWidth: 0, r: 4 }}
+              activeDot={{ r: 6, fill: '#10b981' }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Waste type pie */}
+        <div className="card">
+          <h2 className="font-semibold text-white mb-1">Collections by Waste Type</h2>
+          <p className="text-xs text-slate-400 mb-4">All time breakdown</p>
+          {wasteTypePie.length > 0 ? (
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie data={wasteTypePie} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={4} dataKey="value">
+                  {wasteTypePie.map((entry, index) => (
+                    <Cell key={index} fill={WASTE_COLORS[entry.name] || '#94a3b8'} />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+                <Legend formatter={(value) => <span style={{ color: '#94a3b8', fontSize: 12, textTransform: 'capitalize' }}>{value}</span>} />
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <p className="text-slate-500 text-sm text-center py-8">No data yet</p>
+          )}
+        </div>
+
+        {/* Bin fill distribution */}
+        <div className="card">
+          <h2 className="font-semibold text-white mb-1">Bin Fill Distribution</h2>
+          <p className="text-xs text-slate-400 mb-4">Current fill levels across all bins</p>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={binFillData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis dataKey="range" tick={{ fill: '#64748b', fontSize: 10 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
+              <Tooltip content={<CustomTooltip />} />
+              <Bar dataKey="count" name="Bins" radius={[6, 6, 0, 0]}>
+                {binFillData.map((entry, index) => {
+                  const colors = ['#34d399', '#fbbf24', '#fb923c', '#f87171']
+                  return <Cell key={index} fill={colors[index]} />
+                })}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  )
+}
