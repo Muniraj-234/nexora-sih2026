@@ -5,6 +5,8 @@ import Login from './pages/Login'
 import TodayRoute from './pages/TodayRoute'
 import CollectorLayout from './components/CollectorLayout'
 
+import { ThemeProvider } from './context/ThemeContext'
+
 export default function App() {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
@@ -40,11 +42,13 @@ export default function App() {
   )
 
   return (
-    <Routes>
-      <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-      <Route path="/" element={user ? <CollectorLayout user={user} profile={profile} /> : <Navigate to="/login" />}>
-        <Route index element={<TodayRoute profile={profile} />} />
-      </Route>
-    </Routes>
+    <ThemeProvider>
+      <Routes>
+        <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+        <Route path="/" element={user ? <CollectorLayout user={user} profile={profile} /> : <Navigate to="/login" />}>
+          <Route index element={<TodayRoute profile={profile} />} />
+        </Route>
+      </Routes>
+    </ThemeProvider>
   )
 }

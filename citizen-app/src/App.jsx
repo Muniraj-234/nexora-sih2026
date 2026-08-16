@@ -9,6 +9,8 @@ import LiveTracking from './pages/LiveTracking'
 import MyRequests from './pages/MyRequests'
 import Layout from './components/Layout'
 
+import { ThemeProvider } from './context/ThemeContext'
+
 export default function App() {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
@@ -53,15 +55,17 @@ export default function App() {
   }
 
   return (
-    <Routes>
-      <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-      <Route path="/" element={user ? <Layout user={user} profile={profile} /> : <Navigate to="/login" />}>
-        <Route index element={<Dashboard profile={profile} />} />
-        <Route path="scanner" element={<Scanner profile={profile} />} />
-        <Route path="request-pickup" element={<RequestPickup profile={profile} />} />
-        <Route path="tracking" element={<LiveTracking />} />
-        <Route path="my-requests" element={<MyRequests profile={profile} />} />
-      </Route>
-    </Routes>
+    <ThemeProvider>
+      <Routes>
+        <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+        <Route path="/" element={user ? <Layout user={user} profile={profile} /> : <Navigate to="/login" />}>
+          <Route index element={<Dashboard profile={profile} />} />
+          <Route path="scanner" element={<Scanner profile={profile} />} />
+          <Route path="request-pickup" element={<RequestPickup profile={profile} />} />
+          <Route path="tracking" element={<LiveTracking />} />
+          <Route path="my-requests" element={<MyRequests profile={profile} />} />
+        </Route>
+      </Routes>
+    </ThemeProvider>
   )
 }

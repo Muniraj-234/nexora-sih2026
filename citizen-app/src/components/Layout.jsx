@@ -1,18 +1,20 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import { Leaf, Home, Camera, MapPin, Navigation, List, LogOut } from 'lucide-react'
+import { LayoutDashboard, MapPin, ScanLine, Clock, LogOut, Sun, Moon, Leaf } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
 
 const navItems = [
-  { path: '/', icon: Home, label: 'Home' },
-  { path: '/scanner', icon: Camera, label: 'Scanner' },
-  { path: '/request-pickup', icon: MapPin, label: 'Pickup' },
-  { path: '/tracking', icon: Navigation, label: 'Track' },
-  { path: '/my-requests', icon: List, label: 'My Requests' },
+  { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { path: '/request-pickup', icon: MapPin, label: 'Request' },
+  { path: '/scanner', icon: ScanLine, label: 'Scan' },
+  { path: '/tracking', icon: MapPin, label: 'Track' },
+  { path: '/my-requests', icon: Clock, label: 'History' }
 ]
 
-export default function Layout({ profile }) {
+export default function Layout({ user, profile }) {
   const navigate = useNavigate()
   const location = useLocation()
+  const { theme, toggleTheme } = useTheme()
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -20,21 +22,18 @@ export default function Layout({ profile }) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--nexora-dark)' }}>
-      {/* Top header */}
-      <header className="glass sticky top-0 z-50 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #10b981, #0d9488)' }}>
-            <Leaf size={16} color="white" />
-          </div>
-          <span className="font-bold text-slate-800">Nexora</span>
-          <span className="text-xs text-slate-500 hidden sm:inline">Citizen</span>
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--nexora-bg)' }}>
+      {/* Top Header */}
+      <header className="glass sticky top-0 z-40 px-4 py-3 flex items-center justify-between border-b" style={{ borderColor: 'var(--nexora-border)' }}>
+        <div className="flex flex-col">
+          <span className="text-xs font-medium" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>Good evening,</span>
+          <span className="font-bold text-sm" style={{ color: 'var(--nexora-text)' }}>{profile?.name || 'Citizen'}</span>
         </div>
-        <div className="flex items-center gap-3">
-          {profile?.name && (
-            <span className="text-sm text-slate-600 hidden sm:inline">{profile.name}</span>
-          )}
-          <button onClick={handleLogout} className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors">
+        <div className="flex items-center gap-2">
+          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-black/5" style={{ color: 'var(--nexora-text)' }}>
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          <button onClick={handleLogout} className="p-2 rounded-lg transition-colors" style={{ color: 'var(--nexora-text)', opacity: 0.7 }}>
             <LogOut size={16} />
           </button>
         </div>

@@ -10,6 +10,8 @@ import Collectors from './pages/Collectors'
 import Citizens from './pages/Citizens'
 import Analytics from './pages/Analytics'
 
+import { ThemeProvider } from './context/ThemeContext'
+
 export default function App() {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
@@ -45,16 +47,18 @@ export default function App() {
   )
 
   return (
-    <Routes>
-      <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-      <Route path="/" element={user ? <AdminLayout profile={profile} /> : <Navigate to="/login" />}>
-        <Route index element={<Overview />} />
-        <Route path="fleet" element={<FleetMap />} />
-        <Route path="complaints" element={<Complaints />} />
-        <Route path="collectors" element={<Collectors />} />
-        <Route path="citizens" element={<Citizens />} />
-        <Route path="analytics" element={<Analytics />} />
-      </Route>
-    </Routes>
+    <ThemeProvider>
+      <Routes>
+        <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+        <Route path="/" element={user ? <AdminLayout profile={profile} /> : <Navigate to="/login" />}>
+          <Route index element={<Overview />} />
+          <Route path="fleet" element={<FleetMap />} />
+          <Route path="complaints" element={<Complaints />} />
+          <Route path="collectors" element={<Collectors />} />
+          <Route path="citizens" element={<Citizens />} />
+          <Route path="analytics" element={<Analytics />} />
+        </Route>
+      </Routes>
+    </ThemeProvider>
   )
 }

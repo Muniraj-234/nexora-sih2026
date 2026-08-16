@@ -12,6 +12,31 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  const demoLogin = async () => {
+    setLoading(true)
+    setError('')
+    const { error: err } = await supabase.auth.signInWithPassword({
+      email: 'citizen@nexora.demo',
+      password: 'nexora123'
+    })
+    if (err) {
+      const { data: signupData } = await supabase.auth.signUp({ email: 'citizen@nexora.demo', password: 'nexora123' })
+      if (signupData?.user) {
+        await supabase.from('users').upsert({
+          id: signupData.user.id,
+          role: 'citizen',
+          name: 'Demo Citizen',
+          phone: '9876543212',
+        })
+      }
+      const { error: err2 } = await supabase.auth.signInWithPassword({
+        email: 'citizen@nexora.demo', password: 'nexora123'
+      })
+      if (err2) setError(err2.message)
+    }
+    setLoading(false)
+  }
+
   async function handleLogin(e) {
     e.preventDefault()
     setLoading(true)
@@ -40,29 +65,29 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-slate-50 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center px-6 py-12 relative overflow-hidden" style={{ background: 'var(--nexora-bg)' }}>
       <div className="w-full max-w-md animate-slide-up z-10">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-emerald-500 shadow-lg shadow-emerald-500/30">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 shadow-lg shadow-emerald-500/30" style={{ background: 'var(--nexora-green)' }}>
             <Leaf size={32} color="white" />
           </div>
-          <h1 className="text-3xl font-bold text-slate-800">Nexora</h1>
-          <p className="text-slate-500 mt-1">Smart Waste Management</p>
+          <h1 className="text-3xl font-bold" style={{ color: 'var(--nexora-text)' }}>Nexora</h1>
+          <p className="mt-1" style={{ color: 'var(--nexora-text)', opacity: 0.7 }}>Smart Waste Management</p>
         </div>
 
-        <div className="card shadow-xl shadow-slate-200/50 border-white bg-white p-6 md:p-8 rounded-2xl">
-          <div className="flex rounded-xl mb-6 p-1 bg-slate-100">
+        <div className="card shadow-xl rounded-2xl">
+          <div className="flex rounded-xl mb-6 p-1" style={{ background: 'rgba(0,0,0,0.05)' }}>
             <button
               onClick={() => setMode('login')}
               className="flex-1 py-2 rounded-lg font-semibold text-sm transition-all"
-              style={mode === 'login' ? { background: 'white', color: '#10b981', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' } : { color: '#64748b' }}
+              style={mode === 'login' ? { background: 'var(--nexora-card)', color: 'var(--nexora-green)', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' } : { color: 'var(--nexora-text)', opacity: 0.7 }}
             >
               Sign In
             </button>
             <button
               onClick={() => setMode('register')}
               className="flex-1 py-2 rounded-lg font-semibold text-sm transition-all"
-              style={mode === 'register' ? { background: 'white', color: '#10b981', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' } : { color: '#64748b' }}
+              style={mode === 'register' ? { background: 'var(--nexora-card)', color: 'var(--nexora-green)', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' } : { color: 'var(--nexora-text)', opacity: 0.7 }}
             >
               Register
             </button>
@@ -72,44 +97,44 @@ export default function Login() {
             {mode === 'register' && (
               <>
                 <div className="relative">
-                  <User size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input className="input w-full bg-slate-50" style={{ paddingLeft: '44px' }} placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required />
+                  <User size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--nexora-text)', opacity: 0.5 }} />
+                  <input className="input w-full" style={{ paddingLeft: '44px' }} placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required />
                 </div>
                 <div className="relative">
-                  <Phone size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input className="input w-full bg-slate-50" style={{ paddingLeft: '44px' }} placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} />
+                  <Phone size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--nexora-text)', opacity: 0.5 }} />
+                  <input className="input w-full" style={{ paddingLeft: '44px' }} placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} />
                 </div>
               </>
             )}
             <div className="relative">
-              <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input className="input w-full bg-slate-50" style={{ paddingLeft: '44px' }} type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required />
+              <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--nexora-text)', opacity: 0.5 }} />
+              <input className="input w-full" style={{ paddingLeft: '44px' }} type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required />
             </div>
             <div className="relative">
-              <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input className="input pr-10 w-full bg-slate-50" style={{ paddingLeft: '44px' }} type={showPass ? 'text' : 'password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
-              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--nexora-text)', opacity: 0.5 }} />
+              <input className="input pr-10 w-full" style={{ paddingLeft: '44px' }} type={showPass ? 'text' : 'password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
+              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-100" style={{ color: 'var(--nexora-text)', opacity: 0.5 }}>
                 {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
             {error && (
-              <div className="p-3 rounded-lg text-sm bg-red-50 text-red-600 border border-red-100">
+              <div className="p-3 rounded-lg text-sm bg-red-500/10 text-red-500 border border-red-500/20">
                 {error}
               </div>
             )}
 
-            <button type="submit" className="btn-primary w-full mt-2" disabled={loading}>
-              {loading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              ) : mode === 'login' ? 'Sign In' : 'Create Account'}
-            </button>
+            <div className="flex gap-3 mt-4">
+              <button type="submit" className="btn-primary flex-1" disabled={loading}>
+                {loading ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : mode === 'login' ? 'Sign In' : 'Create Account'}
+              </button>
+              <button type="button" onClick={demoLogin} disabled={loading} className="btn-primary bg-slate-200 text-slate-800" style={{ background: 'rgba(0,0,0,0.1)', color: 'var(--nexora-text)' }}>
+                Demo Login
+              </button>
+            </div>
           </form>
-
-          <div className="mt-6 p-4 rounded-xl bg-emerald-50 border border-emerald-100">
-            <p className="text-xs text-emerald-700 font-semibold mb-1">🎯 Demo — Quick Login</p>
-            <p className="text-xs text-emerald-600/80">Register with any email/password to try as a citizen</p>
-          </div>
         </div>
       </div>
     </div>

@@ -52,21 +52,21 @@ export default function Overview() {
   }
 
   const statCards = [
-    { label: 'Total Collectors', value: stats.collectors, icon: Truck, color: '#10b981', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.2)' },
-    { label: 'Total Citizens', value: stats.citizens, icon: Users, color: '#60a5fa', bg: 'rgba(59,130,246,0.1)', border: 'rgba(59,130,246,0.2)' },
-    { label: 'Pending Pickups', value: stats.pendingPickups, icon: Clock, color: '#fbbf24', bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.2)' },
-    { label: 'Open Complaints', value: stats.openComplaints, icon: AlertTriangle, color: '#f87171', bg: 'rgba(239,68,68,0.1)', border: 'rgba(239,68,68,0.2)' },
-    { label: 'Collections Today', value: stats.collectionsToday, icon: CheckCircle, color: '#34d399', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.2)' },
-    { label: 'Avg Bin Fill', value: `${stats.avgFill}%`, icon: BarChart2, color: '#a78bfa', bg: 'rgba(139,92,246,0.1)', border: 'rgba(139,92,246,0.2)' },
-    { label: 'Total Bins', value: stats.bins, icon: Trash2, color: '#fb923c', bg: 'rgba(251,146,60,0.1)', border: 'rgba(251,146,60,0.2)' },
-    { label: 'Total Pickups', value: stats.pickups, icon: MapPin, color: '#38bdf8', bg: 'rgba(56,189,248,0.1)', border: 'rgba(56,189,248,0.2)' },
+    { label: 'Total Bins', value: stats.bins, icon: Trash2, color: '#00d632', bg: 'rgba(0,214,50,0.1)', border: 'rgba(0,214,50,0.2)' },
+    { label: 'Pending Pickups', value: stats.pendingPickups, icon: Clock, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)', border: 'rgba(59,130,246,0.2)' },
+    { label: 'Open Complaints', value: stats.openComplaints, icon: AlertTriangle, color: '#ef4444', bg: 'rgba(239,68,68,0.1)', border: 'rgba(239,68,68,0.2)' },
+    { label: 'Total Pickups', value: stats.pickups, icon: MapPin, color: '#f97316', bg: 'rgba(249,115,22,0.1)', border: 'rgba(249,115,22,0.2)' },
+    { label: 'Total Collectors', value: stats.collectors, icon: Truck, color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)', border: 'rgba(139,92,246,0.2)' },
+    { label: 'Total Citizens', value: stats.citizens, icon: Users, color: '#06b6d4', bg: 'rgba(6,182,212,0.1)', border: 'rgba(6,182,212,0.2)' },
+    { label: 'Avg Bin Fill', value: `${stats.avgFill}%`, icon: BarChart2, color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.2)' },
+    { label: 'Collections Today', value: stats.collectionsToday, icon: CheckCircle, color: '#10b981', bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.2)' },
   ]
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Dashboard Overview</h1>
-        <p className="text-slate-500 text-sm mt-1">Mumbai Municipal Corporation · Real-time data</p>
+    <div className="max-w-7xl mx-auto space-y-8">
+      {/* Page Title Header */}
+      <div className="hidden lg:block mb-8">
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Overview</h1>
       </div>
 
       {/* Alert banner for pending */}
@@ -81,44 +81,62 @@ export default function Overview() {
       )}
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         {statCards.map(card => {
           const Icon = card.icon
           return (
-            <div key={card.label} className="card" style={{ borderColor: card.border, background: `linear-gradient(135deg, ${card.bg}, rgba(255,255,255,1))` }}>
-              <div className="flex items-center justify-between mb-3">
-                <Icon size={18} style={{ color: card.color }} />
-                <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: card.color }} />
+            <div key={card.label} className="card relative overflow-hidden transition-transform hover:-translate-y-1 hover:shadow-lg" style={{ borderColor: card.border }}>
+              <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
+                <Icon size={64} style={{ color: card.color }} />
               </div>
-              <div className="text-2xl font-bold text-slate-800 mb-1">{loading ? '—' : card.value}</div>
-              <div className="text-xs text-slate-500">{card.label}</div>
+              <div className="relative z-10 flex flex-col h-full">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-sm" style={{ background: card.bg }}>
+                    <Icon size={24} style={{ color: card.color }} />
+                  </div>
+                  <div className="text-sm font-semibold text-slate-500">{card.label}</div>
+                </div>
+                <div className="text-4xl font-extrabold text-slate-800 tracking-tight">{loading ? '—' : card.value}</div>
+              </div>
             </div>
           )
         })}
       </div>
 
       {/* Recent Collections */}
-      <div className="card">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-slate-800">Recent Collections</h2>
-          <span className="text-xs text-slate-500">Live feed</span>
+      <div className="card shadow-md border-0 ring-1 ring-black/5">
+        <div className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: 'var(--nexora-border)' }}>
+          <h2 className="text-lg font-bold text-slate-800">Recent Collections</h2>
+          <span className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-semibold uppercase tracking-wider">Live feed</span>
         </div>
         {recentActivity.length === 0 ? (
-          <p className="text-slate-500 text-sm text-center py-6">No collections recorded yet</p>
+          <div className="p-12 text-center">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+               <Truck size={24} className="text-slate-400" />
+            </div>
+            <p className="text-slate-500 font-medium">No collections recorded yet</p>
+          </div>
         ) : (
-          <div className="space-y-2">
+          <div className="divide-y" style={{ borderColor: 'var(--nexora-border)' }}>
             {recentActivity.map(log => (
-              <div key={log.id} className="flex items-center gap-3 py-2 border-b last:border-0"
-                style={{ borderColor: 'var(--nexora-border)' }}>
-                <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#10b981' }} />
-                <div className="flex-1 min-w-0">
-                  <span className="text-sm text-white">{log.users?.name || 'Collector'}</span>
-                  <span className="text-slate-400 text-sm"> collected </span>
-                  <span className="text-sm capitalize" style={{ color: '#10b981' }}>{log.bins?.type || log.waste_type} waste</span>
+              <div key={log.id} className="flex items-center gap-4 px-6 py-4 hover:bg-slate-50/50 transition-colors">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-100 text-emerald-600 flex-shrink-0">
+                  <Truck size={18} />
                 </div>
-                <span className="text-xs text-slate-500 flex-shrink-0">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-2 mb-0.5">
+                    <span className="font-bold text-slate-800 text-base">{log.users?.name || 'Collector'}</span>
+                    <span className="text-slate-500 text-sm">collected</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold capitalize bg-emerald-100 text-emerald-700">
+                      {log.bins?.type || log.waste_type} Waste
+                    </span>
+                  </div>
+                </div>
+                <div className="text-sm font-medium text-slate-400 flex-shrink-0 bg-slate-50 px-3 py-1 rounded-lg">
                   {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </span>
+                </div>
               </div>
             ))}
           </div>
