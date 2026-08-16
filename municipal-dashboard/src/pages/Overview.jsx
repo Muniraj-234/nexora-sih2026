@@ -63,7 +63,7 @@ export default function Overview() {
   ]
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="w-full space-y-6">
       {/* Page Title Header */}
       <div className="hidden lg:block mb-8">
         <h1 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--nexora-text)' }}>Overview</h1>

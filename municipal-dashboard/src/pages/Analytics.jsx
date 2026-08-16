@@ -108,7 +108,7 @@ export default function Analytics() {
   )
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       <div className="flex items-center justify-between mb-8">
         <div>
           <p style={{ color: 'var(--nexora-text)', opacity: 0.6 }} className="text-sm font-medium">Collection performance · Last 7 days</p>

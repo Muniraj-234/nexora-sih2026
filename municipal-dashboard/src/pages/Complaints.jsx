@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { AlertTriangle, CheckCircle, Clock, Search, ExternalLink, RefreshCw } from 'lucide-react'
+import { AlertTriangle, CheckCircle, Clock, Search, ExternalLink, RefreshCw, MapPin } from 'lucide-react'
 
 const STATUS_OPTIONS = ['open', 'in_progress', 'resolved']
 
@@ -46,7 +46,7 @@ export default function Complaints() {
   const statusIcon = { open: AlertTriangle, in_progress: Clock, resolved: CheckCircle }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-8">
         <div>
           <p style={{ color: 'var(--nexora-text)', opacity: 0.6 }} className="text-sm font-medium">{complaints.length} total complaints</p>

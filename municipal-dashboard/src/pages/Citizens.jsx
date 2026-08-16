@@ -64,7 +64,7 @@ export default function Citizens() {
   )
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-8">
         <div>
           <p style={{ color: 'var(--nexora-text)', opacity: 0.6 }} className="text-sm font-medium">{citizens.length} registered citizens</p>

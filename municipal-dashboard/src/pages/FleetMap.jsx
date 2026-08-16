@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet'
 import L from 'leaflet'
 import { supabase } from '../lib/supabase'
 import { Wifi, WifiOff, RefreshCw, Trash2 } from 'lucide-react'
+import 'leaflet/dist/leaflet.css'
 
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
@@ -71,7 +72,7 @@ export default function FleetMap() {
   const criticalBins = bins.filter(b => b.fill_level > 80)
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-8">
         <div>
           <p style={{ color: 'var(--nexora-text)', opacity: 0.6 }} className="text-sm font-medium">Real-time collector positions + bin status</p>

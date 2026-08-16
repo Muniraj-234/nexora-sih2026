@@ -103,7 +103,7 @@ export default function Collectors() {
     routes.find(r => r.collector_id === collectorId)
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="w-full">
       {/* Page header actions */}
       <div className="flex items-center justify-between mb-8">
         <div>
