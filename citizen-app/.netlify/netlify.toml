@@ -1,0 +1,28 @@
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "C:\\Users\\Muniraj\\Desktop\\GREEN_WORLD\\citizen-app\\dist"
+publishOrigin = "ui"
+commandOrigin = "ui"
+base = "C:\\Users\\Muniraj\\Desktop\\GREEN_WORLD\\citizen-app"
+command = "npm run build"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]

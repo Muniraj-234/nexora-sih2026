@@ -109,7 +109,7 @@ export default function TodayRoute({ profile }) {
       // Create a default route with all bins for this collector
       const { data: allBins } = await supabase.from('bins').select('*').limit(8)
       if (allBins) {
-        const optimized = nearestNeighborRoute(allBins, 19.1136, 72.8697)
+        const optimized = nearestNeighborRoute(allBins, 11.6643, 78.1460)
         setOptimizedRoute(optimized)
         setBins(allBins)
         // Insert route into DB
@@ -118,8 +118,8 @@ export default function TodayRoute({ profile }) {
           collector_id: profile.id,
           date: today,
           ordered_bin_ids: binIds,
-          current_lat: 19.1136,
-          current_lng: 72.8697,
+          current_lat: 11.6643,
+          current_lng: 78.1460,
         }).select().single()
         if (newRoute) setRoute(newRoute)
       }
@@ -153,7 +153,7 @@ export default function TodayRoute({ profile }) {
           setMyPosition(prev => prev ? [
             prev[0] + (Math.random() - 0.5) * 0.001,
             prev[1] + (Math.random() - 0.5) * 0.001,
-          ] : [19.1136, 72.8697])
+          ] : [11.6643, 78.1460])
         }
       )
     }
@@ -239,8 +239,8 @@ export default function TodayRoute({ profile }) {
 
       {/* Map */}
       <div style={{ height: '280px' }} className="rounded-2xl overflow-hidden mb-5">
-        <MapContainer center={myPosition || [19.1136, 72.8697]} zoom={14} style={{ height: '100%', width: '100%' }}>
-          <TileLayer attribution='&copy; OpenStreetMap' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <MapContainer center={myPosition || [11.6643, 78.1460]} zoom={14} style={{ height: '100%', width: '100%' }}>
+          <TileLayer attribution='&copy; <a href="https://carto.com/">CartoDB</a>' url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
           {/* Route line */}
           {polylinePoints.length > 1 && (
             <Polyline positions={polylinePoints} color="#10b981" weight={3} opacity={0.7} dashArray="8,4" />

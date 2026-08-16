@@ -40,38 +40,29 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden" style={{ background: 'var(--nexora-dark)' }}>
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #10b981, transparent)' }}></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #0d9488, transparent)' }}></div>
-      </div>
-
-      <div className="w-full max-w-md animate-slide-up">
-        {/* Logo */}
+    <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-slate-50 relative overflow-hidden">
+      <div className="w-full max-w-md animate-slide-up z-10">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 animate-pulse-glow" style={{ background: 'linear-gradient(135deg, #10b981, #0d9488)' }}>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-emerald-500 shadow-lg shadow-emerald-500/30">
             <Leaf size={32} color="white" />
           </div>
-          <h1 className="text-3xl font-bold text-white">Nexora</h1>
-          <p className="text-slate-400 mt-1">Smart Waste Management · Citizen App</p>
+          <h1 className="text-3xl font-bold text-slate-800">Nexora</h1>
+          <p className="text-slate-500 mt-1">Smart Waste Management</p>
         </div>
 
-        {/* Card */}
-        <div className="card">
-          {/* Tabs */}
-          <div className="flex rounded-xl mb-6 p-1" style={{ background: 'rgba(15,23,42,0.6)' }}>
+        <div className="card shadow-xl shadow-slate-200/50 border-white bg-white p-6 md:p-8 rounded-2xl">
+          <div className="flex rounded-xl mb-6 p-1 bg-slate-100">
             <button
               onClick={() => setMode('login')}
               className="flex-1 py-2 rounded-lg font-semibold text-sm transition-all"
-              style={mode === 'login' ? { background: 'linear-gradient(135deg, #10b981, #0d9488)', color: 'white' } : { color: '#64748b' }}
+              style={mode === 'login' ? { background: 'white', color: '#10b981', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' } : { color: '#64748b' }}
             >
               Sign In
             </button>
             <button
               onClick={() => setMode('register')}
               className="flex-1 py-2 rounded-lg font-semibold text-sm transition-all"
-              style={mode === 'register' ? { background: 'linear-gradient(135deg, #10b981, #0d9488)', color: 'white' } : { color: '#64748b' }}
+              style={mode === 'register' ? { background: 'white', color: '#10b981', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' } : { color: '#64748b' }}
             >
               Register
             </button>
@@ -81,44 +72,43 @@ export default function Login() {
             {mode === 'register' && (
               <>
                 <div className="relative">
-                  <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                  <input className="input pl-10" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required />
+                  <User size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input className="input w-full bg-slate-50" style={{ paddingLeft: '44px' }} placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required />
                 </div>
                 <div className="relative">
-                  <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                  <input className="input pl-10" placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} />
+                  <Phone size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input className="input w-full bg-slate-50" style={{ paddingLeft: '44px' }} placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} />
                 </div>
               </>
             )}
             <div className="relative">
-              <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input className="input pl-10" type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required />
+              <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input className="input w-full bg-slate-50" style={{ paddingLeft: '44px' }} type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required />
             </div>
             <div className="relative">
-              <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input className="input pl-10 pr-10" type={showPass ? 'text' : 'password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
-              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
-                {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+              <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input className="input pr-10 w-full bg-slate-50" style={{ paddingLeft: '44px' }} type={showPass ? 'text' : 'password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
+              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
             {error && (
-              <div className="p-3 rounded-lg text-sm" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#f87171' }}>
+              <div className="p-3 rounded-lg text-sm bg-red-50 text-red-600 border border-red-100">
                 {error}
               </div>
             )}
 
-            <button type="submit" className="btn-primary w-full" disabled={loading}>
+            <button type="submit" className="btn-primary w-full mt-2" disabled={loading}>
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : mode === 'login' ? 'Sign In' : 'Create Account'}
             </button>
           </form>
 
-          {/* Demo accounts */}
-          <div className="mt-6 p-4 rounded-xl" style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.15)' }}>
-            <p className="text-xs text-emerald-400 font-semibold mb-2">🎯 Demo — Quick Login</p>
-            <p className="text-xs text-slate-400">Register with any email/password to try as a citizen</p>
+          <div className="mt-6 p-4 rounded-xl bg-emerald-50 border border-emerald-100">
+            <p className="text-xs text-emerald-700 font-semibold mb-1">🎯 Demo — Quick Login</p>
+            <p className="text-xs text-emerald-600/80">Register with any email/password to try as a citizen</p>
           </div>
         </div>
       </div>

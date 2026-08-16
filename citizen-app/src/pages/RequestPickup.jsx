@@ -33,7 +33,7 @@ const WASTE_TYPES = [
 ]
 
 // Mumbai center
-const DEFAULT_CENTER = [19.1136, 72.8697]
+const DEFAULT_CENTER = [11.6643, 78.1460]
 
 export default function RequestPickup({ profile }) {
   const [selectedLocation, setSelectedLocation] = useState(null)
@@ -131,8 +131,8 @@ export default function RequestPickup({ profile }) {
       <div style={{ height: '280px' }} className="rounded-2xl overflow-hidden mb-4" ref={null}>
         <MapContainer center={selectedLocation ? [selectedLocation.lat, selectedLocation.lng] : DEFAULT_CENTER} zoom={15} style={{ height: '100%', width: '100%' }}>
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           />
           <MapClickHandler onLocationSelect={setSelectedLocation} />
           {selectedLocation && (

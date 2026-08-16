@@ -27,21 +27,21 @@ export default function Layout({ profile }) {
           <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #10b981, #0d9488)' }}>
             <Leaf size={16} color="white" />
           </div>
-          <span className="font-bold text-white">Nexora</span>
+          <span className="font-bold text-slate-800">Nexora</span>
           <span className="text-xs text-slate-500 hidden sm:inline">Citizen</span>
         </div>
         <div className="flex items-center gap-3">
           {profile?.name && (
-            <span className="text-sm text-slate-300 hidden sm:inline">{profile.name}</span>
+            <span className="text-sm text-slate-600 hidden sm:inline">{profile.name}</span>
           )}
-          <button onClick={handleLogout} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
+          <button onClick={handleLogout} className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors">
             <LogOut size={16} />
           </button>
         </div>
       </header>
 
       {/* Main content */}
-      <main className="flex-1 overflow-auto pb-20">
+      <main className="flex-1 overflow-auto pb-20 px-4 max-w-md mx-auto w-full">
         <Outlet />
       </main>
 

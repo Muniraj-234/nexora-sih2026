@@ -2,23 +2,36 @@
 @import "tailwindcss";
 
 :root {
-  --nexora-dark: #0f172a;
-  --nexora-card: #1e293b;
-  --nexora-border: #334155;
+  --nexora-green: #10b981;
+  --nexora-teal: #0d9488;
+  --nexora-dark: #f8fafc;
+  --nexora-card: #ffffff;
+  --nexora-border: #000000;
+  --nexora-text: #1e293b;
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nexora-dark: #0f172a;
+    --nexora-card: #1e293b;
+    --nexora-border: #334155;
+    --nexora-text: #f1f5f9;
+  }
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background-color: var(--nexora-dark); color: #f1f5f9; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+body { font-family: 'Inter', sans-serif; background-color: var(--nexora-dark); color: var(--nexora-text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 .leaflet-container { height: 100%; width: 100%; border-radius: 12px; }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--nexora-dark); }
 ::-webkit-scrollbar-thumb { background: var(--nexora-border); border-radius: 3px; }
 @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 .animate-slide-up { animation: slide-up 0.4s ease forwards; }
-.glass { background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(51, 65, 85, 0.6); }
+.glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(226, 232, 240, 0.8); }
 .card { background: var(--nexora-card); border: 1px solid var(--nexora-border); border-radius: 16px; padding: 20px; }
 .btn-primary { background: linear-gradient(135deg, #10b981, #0d9488); color: white; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
 .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,185,129,0.3); }
-.input { background: rgba(15,23,42,0.8); border: 1px solid var(--nexora-border); border-radius: 10px; padding: 10px 14px; color: #f1f5f9; font-size: 14px; outline: none; }
+.input { background: rgba(15,23,42,0.8); border: 1px solid var(--nexora-border); border-radius: 10px; padding: 12px; color: var(--nexora-text); font-size: 14px; outline: none; }
 .input:focus { border-color: #10b981; }
 .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: capitalize; }
 .badge-open { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }

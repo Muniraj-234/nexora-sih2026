@@ -54,7 +54,7 @@ export default function Dashboard({ profile }) {
       {/* Greeting */}
       <div className="mb-6 animate-slide-up">
         <p className="text-slate-400 text-sm">{greeting} 👋</p>
-        <h1 className="text-2xl font-bold text-white">{profile?.name || 'Citizen'}</h1>
+        <h1 className="text-2xl font-bold text-slate-800">{profile?.name || 'Citizen'}</h1>
         <p className="text-sm text-slate-500 mt-0.5">Mumbai, Maharashtra</p>
       </div>
 
@@ -87,7 +87,7 @@ export default function Dashboard({ profile }) {
               <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: action.gradient }}>
                 <Icon size={20} color="white" />
               </div>
-              <div className="font-semibold text-white text-sm">{action.label}</div>
+              <div className="font-semibold text-slate-800 text-sm">{action.label}</div>
               <div className="text-xs text-slate-400 mt-0.5">{action.sub}</div>
             </button>
           )
@@ -108,7 +108,7 @@ export default function Dashboard({ profile }) {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm font-medium text-white capitalize">{bin.type} Bin</span>
+                  <span className="text-sm font-medium text-slate-800 capitalize">{bin.type} Bin</span>
                   <span className="text-xs font-bold" style={{ color: fillColor }}>{bin.fill_level}%</span>
                 </div>
                 <div className="w-full rounded-full h-1.5" style={{ background: 'rgba(51,65,85,0.8)' }}>
@@ -128,7 +128,7 @@ export default function Dashboard({ profile }) {
             {recentRequests.map(req => (
               <div key={req.id} className="card flex items-center justify-between py-3">
                 <div>
-                  <div className="text-sm font-medium text-white capitalize">{req.waste_type || 'Mixed'} Waste</div>
+                  <div className="text-sm font-medium text-slate-800 capitalize">{req.waste_type || 'Mixed'} Waste</div>
                   <div className="text-xs text-slate-400">{new Date(req.created_at).toLocaleDateString()}</div>
                 </div>
                 <span className={`badge badge-${req.status}`}>{req.status}</span>

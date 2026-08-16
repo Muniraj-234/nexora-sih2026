@@ -9,18 +9,23 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  // Demo quick login
   const demoLogin = async () => {
     setLoading(true)
     setError('')
-    // Try signing in as demo collector
     const { error: err } = await supabase.auth.signInWithPassword({
       email: 'collector@nexora.demo',
       password: 'nexora123'
     })
     if (err) {
-      // Create demo account
-      await supabase.auth.signUp({ email: 'collector@nexora.demo', password: 'nexora123' })
+      const { data: signupData } = await supabase.auth.signUp({ email: 'collector@nexora.demo', password: 'nexora123' })
+      if (signupData?.user) {
+        await supabase.from('users').upsert({
+          id: signupData.user.id,
+          role: 'collector',
+          name: 'Demo Collector',
+          phone: '9876543211',
+        })
+      }
       const { error: err2 } = await supabase.auth.signInWithPassword({
         email: 'collector@nexora.demo', password: 'nexora123'
       })
@@ -34,52 +39,54 @@ export default function Login() {
     setLoading(true)
     setError('')
     const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) setError(error.message)
+    if (error) {
+      if (email === 'collector@nexora.demo' && error.message.includes('Invalid login credentials')) {
+        await demoLogin()
+        return
+      }
+      setError(error.message)
+    }
     setLoading(false)
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden" style={{ background: 'var(--nexora-dark)' }}>
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #10b981, transparent)' }}></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #0d9488, transparent)' }}></div>
-      </div>
-
-      <div className="w-full max-w-md animate-slide-up">
+    <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-slate-50 relative overflow-hidden">
+      <div className="w-full max-w-md animate-slide-up z-10">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style={{ background: 'linear-gradient(135deg, #10b981, #0d9488)' }}>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-emerald-500 shadow-lg shadow-emerald-500/30">
             <Truck size={32} color="white" />
           </div>
-          <h1 className="text-3xl font-bold text-white">Nexora</h1>
-          <p className="text-slate-400 mt-1">Collector App · SIH 2026</p>
+          <h1 className="text-3xl font-bold text-slate-800">Nexora</h1>
+          <p className="text-slate-500 mt-1">Collector Portal</p>
         </div>
 
-        <div className="card">
-          <h2 className="text-xl font-bold text-white mb-6">Collector Sign In</h2>
+        <div className="card shadow-xl shadow-slate-200/50 border-white bg-white p-6 md:p-8 rounded-2xl">
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="relative">
-              <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input className="input pl-10" type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required />
+              <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input className="input w-full bg-slate-50" style={{ paddingLeft: '44px' }} type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} required />
             </div>
             <div className="relative">
-              <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input className="input pl-10 pr-10" type={showPass ? 'text' : 'password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
-              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500">
-                {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+              <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input className="input pr-10 w-full bg-slate-50" style={{ paddingLeft: '44px' }} type={showPass ? 'text' : 'password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
+              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
-            {error && <div className="p-3 rounded-lg text-sm" style={{ background: 'rgba(239,68,68,0.1)', color: '#f87171' }}>{error}</div>}
-            <button type="submit" className="btn-primary" disabled={loading}>
+            
+            {error && <div className="p-3 rounded-lg text-sm bg-red-50 text-red-600 border border-red-100">{error}</div>}
+            
+            <button type="submit" className="btn-primary w-full mt-2" disabled={loading}>
               {loading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : 'Sign In'}
             </button>
           </form>
 
-          <div className="mt-4 p-3 rounded-xl" style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.15)' }}>
-            <p className="text-xs text-emerald-400 font-semibold mb-2">🚛 Demo Collector Login</p>
-            <p className="text-xs text-slate-400 mb-2">Use demo seeded collector account:</p>
-            <p className="text-xs text-slate-300">Email: <span className="text-emerald-400">collector@nexora.demo</span></p>
-            <p className="text-xs text-slate-300">Password: <span className="text-emerald-400">nexora123</span></p>
-            <button onClick={demoLogin} disabled={loading} className="mt-3 text-xs px-4 py-2 rounded-lg font-semibold" style={{ background: 'rgba(16,185,129,0.2)', color: '#10b981', border: '1px solid rgba(16,185,129,0.3)', cursor: 'pointer' }}>
+          <div className="mt-6 p-4 rounded-xl bg-emerald-50 border border-emerald-100">
+            <p className="text-xs text-emerald-700 font-semibold mb-2">🚛 Demo Collector Login</p>
+            <p className="text-xs text-emerald-600/80 mb-2">Use demo seeded collector account:</p>
+            <p className="text-xs text-emerald-800 font-medium">Email: collector@nexora.demo</p>
+            <p className="text-xs text-emerald-800 font-medium">Password: nexora123</p>
+            <button onClick={demoLogin} disabled={loading} className="mt-3 w-full text-xs px-4 py-2 rounded-lg font-semibold bg-white text-emerald-600 border border-emerald-200 hover:bg-emerald-100 transition-colors shadow-sm">
               Quick Demo Login
             </button>
           </div>

@@ -49,7 +49,7 @@ export default function CollectorLayout({ profile }) {
         </div>
       </header>
 
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto px-4 max-w-md mx-auto w-full">
         <Outlet />
       </main>
 

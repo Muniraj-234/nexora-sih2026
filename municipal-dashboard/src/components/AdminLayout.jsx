@@ -26,17 +26,16 @@ export default function AdminLayout({ profile }) {
   }
 
   const Sidebar = () => (
-    <div className="flex flex-col h-full" style={{ background: '#0c1827' }}>
+    <div className="flex flex-col h-full" style={{ background: '#064e3b' }}>
       {/* Logo */}
-      <div className="px-6 py-5 border-b" style={{ borderColor: 'var(--nexora-border)' }}>
+      <div className="px-6 py-5 border-b" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg, #10b981, #0d9488)' }}>
-            <Building2 size={18} color="white" />
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-white">
+            <Building2 size={18} color="#064e3b" />
           </div>
           <div>
             <div className="font-bold text-white text-sm">Nexora</div>
-            <div className="text-xs text-slate-500">Municipal Dashboard</div>
+            <div className="text-xs text-emerald-200">Municipal Dashboard</div>
           </div>
         </div>
       </div>
@@ -51,8 +50,8 @@ export default function AdminLayout({ profile }) {
               onClick={() => { navigate(path); setSidebarOpen(false) }}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
               style={active
-                ? { background: 'rgba(16,185,129,0.15)', color: '#10b981', borderLeft: '3px solid #10b981' }
-                : { color: '#64748b' }}
+                ? { background: 'rgba(255,255,255,0.15)', color: 'white' }
+                : { color: 'rgba(255,255,255,0.6)' }}
             >
               <Icon size={18} />
               {label}
@@ -62,19 +61,18 @@ export default function AdminLayout({ profile }) {
       </nav>
 
       {/* User info + logout */}
-      <div className="px-4 py-4 border-t" style={{ borderColor: 'var(--nexora-border)' }}>
+      <div className="px-4 py-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-            style={{ background: 'linear-gradient(135deg, #10b981, #0d9488)' }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-white text-emerald-900">
             {profile?.name?.[0] || 'A'}
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-medium text-white truncate">{profile?.name || 'Admin'}</div>
-            <div className="text-xs text-slate-500 capitalize">{profile?.role || 'admin'}</div>
+            <div className="text-xs text-emerald-200 capitalize">{profile?.role || 'admin'}</div>
           </div>
         </div>
         <button onClick={handleLogout}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-white hover:bg-slate-700 transition-all">
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-emerald-100 hover:text-white hover:bg-emerald-800 transition-all">
           <LogOut size={16} /> Sign Out
         </button>
       </div>

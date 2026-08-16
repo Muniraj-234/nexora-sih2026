@@ -65,8 +65,8 @@ export default function Overview() {
   return (
     <div className="max-w-5xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">Dashboard Overview</h1>
-        <p className="text-slate-400 text-sm mt-1">Mumbai Municipal Corporation · Real-time data</p>
+        <h1 className="text-2xl font-bold text-slate-800">Dashboard Overview</h1>
+        <p className="text-slate-500 text-sm mt-1">Mumbai Municipal Corporation · Real-time data</p>
       </div>
 
       {/* Alert banner for pending */}
@@ -74,7 +74,7 @@ export default function Overview() {
         <div className="rounded-xl p-4 mb-6 flex items-center gap-3"
           style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.25)' }}>
           <AlertTriangle size={18} style={{ color: '#fbbf24' }} />
-          <p className="text-sm" style={{ color: '#fde68a' }}>
+          <p className="text-sm" style={{ color: '#d97706' }}>
             <span className="font-semibold">{stats.pendingPickups} pickup requests</span> are pending assignment.
           </p>
         </div>
@@ -85,13 +85,13 @@ export default function Overview() {
         {statCards.map(card => {
           const Icon = card.icon
           return (
-            <div key={card.label} className="card" style={{ borderColor: card.border, background: `linear-gradient(135deg, ${card.bg}, rgba(30,41,59,0.8))` }}>
+            <div key={card.label} className="card" style={{ borderColor: card.border, background: `linear-gradient(135deg, ${card.bg}, rgba(255,255,255,1))` }}>
               <div className="flex items-center justify-between mb-3">
                 <Icon size={18} style={{ color: card.color }} />
                 <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: card.color }} />
               </div>
-              <div className="text-2xl font-bold text-white mb-1">{loading ? '—' : card.value}</div>
-              <div className="text-xs text-slate-400">{card.label}</div>
+              <div className="text-2xl font-bold text-slate-800 mb-1">{loading ? '—' : card.value}</div>
+              <div className="text-xs text-slate-500">{card.label}</div>
             </div>
           )
         })}
@@ -100,7 +100,7 @@ export default function Overview() {
       {/* Recent Collections */}
       <div className="card">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-white">Recent Collections</h2>
+          <h2 className="font-semibold text-slate-800">Recent Collections</h2>
           <span className="text-xs text-slate-500">Live feed</span>
         </div>
         {recentActivity.length === 0 ? (

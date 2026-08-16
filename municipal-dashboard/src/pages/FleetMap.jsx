@@ -31,7 +31,7 @@ export default function FleetMap() {
   const [showBins, setShowBins] = useState(true)
   const [connected, setConnected] = useState(false)
   const [lastUpdate, setLastUpdate] = useState(null)
-  const DEFAULT_CENTER = [19.1136, 72.8697]
+  const DEFAULT_CENTER = [11.6643, 78.1460]
 
   useEffect(() => {
     fetchAll()
@@ -116,8 +116,8 @@ export default function FleetMap() {
       <div style={{ height: '460px' }} className="rounded-2xl overflow-hidden mb-4">
         <MapContainer center={DEFAULT_CENTER} zoom={14} style={{ height: '100%', width: '100%' }}>
           <TileLayer
-            attribution='&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           />
           {showBins && bins.map(bin => (
             <Marker key={bin.id} position={[bin.lat, bin.lng]} icon={getBinIcon(bin.fill_level, bin.type)}>
