@@ -65,31 +65,30 @@ export default function Citizens() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-white">Citizens</h1>
-          <p className="text-slate-400 text-sm mt-1">{citizens.length} registered citizens</p>
+          <p style={{ color: 'var(--nexora-text)', opacity: 0.6 }} className="text-sm font-medium">{citizens.length} registered citizens</p>
         </div>
         <button onClick={() => { setShowModal(true); setFormError(''); setFormSuccess('') }}
-          className="btn-primary" style={{ width: 'auto', padding: '10px 20px' }}>
+          className="btn-primary" style={{ width: 'auto', padding: '12px 24px' }}>
           <Plus size={18} /> Add Citizen
         </button>
       </div>
 
-      <div className="relative mb-5">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-        <input className="input pl-9 w-full" placeholder="Search by name or phone..."
+      <div className="relative mb-6">
+        <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 opacity-50" style={{ color: 'var(--nexora-text)' }} />
+        <input className="input pl-11 w-full h-full min-h-[3.5rem]" placeholder="Search by name or phone..."
           value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
         {[
           { label: 'Total Citizens', value: citizens.length, color: '#60a5fa' },
           { label: 'Registered Today', value: citizens.filter(c => new Date(c.created_at).toDateString() === new Date().toDateString()).length, color: '#34d399' },
         ].map(s => (
-          <div key={s.label} className="card text-center py-4">
-            <div className="text-2xl font-bold" style={{ color: s.color }}>{s.value}</div>
-            <div className="text-xs text-slate-400 mt-1">{s.label}</div>
+          <div key={s.label} className="card text-center py-6 flex flex-col justify-center transition-transform hover:-translate-y-1 hover:shadow-lg">
+            <div className="text-3xl font-extrabold mb-2 tracking-tight" style={{ color: s.color }}>{s.value}</div>
+            <div className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -104,18 +103,18 @@ export default function Citizens() {
           <p className="text-slate-400">No citizens found</p>
         </div>
       ) : (
-        <div className="grid gap-3">
+        <div className="grid gap-4">
           {filtered.map(citizen => (
-            <div key={citizen.id} className="card flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-sm"
-                style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
+            <div key={citizen.id} className="card flex items-center gap-5 p-5 transition-colors hover:bg-black/5">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-lg"
+                style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: 'white' }}>
                 {citizen.name?.[0]?.toUpperCase() || 'C'}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-white">{citizen.name}</div>
-                <div className="flex items-center gap-3 mt-1 flex-wrap">
-                  {citizen.phone && <span className="text-xs text-slate-400 flex items-center gap-1"><Phone size={10} />{citizen.phone}</span>}
-                  <span className="text-xs text-slate-500 flex items-center gap-1"><Calendar size={10} />Joined {new Date(citizen.created_at).toLocaleDateString()}</span>
+                <div className="font-bold text-base mb-1" style={{ color: 'var(--nexora-text)' }}>{citizen.name}</div>
+                <div className="flex items-center gap-4 flex-wrap" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>
+                  {citizen.phone && <span className="text-sm font-medium flex items-center gap-1.5"><Phone size={14} />{citizen.phone}</span>}
+                  <span className="text-sm font-medium flex items-center gap-1.5"><Calendar size={14} />Joined {new Date(citizen.created_at).toLocaleDateString()}</span>
                 </div>
               </div>
               <button onClick={() => handleDelete(citizen.id, citizen.name)}

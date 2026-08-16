@@ -108,14 +108,15 @@ export default function Analytics() {
   )
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">Analytics</h1>
-        <p className="text-slate-400 text-sm mt-1">Collection performance · Last 7 days</p>
+    <div className="max-w-6xl mx-auto space-y-6">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <p style={{ color: 'var(--nexora-text)', opacity: 0.6 }} className="text-sm font-medium">Collection performance · Last 7 days</p>
+        </div>
       </div>
 
       {/* KPI cards */}
-      <div className="grid grid-cols-3 gap-3 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
         {[
           { label: 'Collections (7d)', value: totalCollections, icon: BarChart2, color: '#10b981' },
           { label: 'Avg/Day', value: Math.round(totalCollections / 7), icon: TrendingUp, color: '#60a5fa' },
@@ -123,20 +124,20 @@ export default function Analytics() {
         ].map(kpi => {
           const Icon = kpi.icon
           return (
-            <div key={kpi.label} className="card">
-              <Icon size={20} style={{ color: kpi.color }} className="mb-3" />
-              <div className="text-2xl font-bold text-white">{kpi.value}</div>
-              <div className="text-xs text-slate-400 mt-1">{kpi.label}</div>
+            <div key={kpi.label} className="card py-6 flex flex-col justify-center transition-transform hover:-translate-y-1 hover:shadow-lg">
+              <Icon size={24} style={{ color: kpi.color }} className="mb-4" />
+              <div className="text-3xl font-extrabold mb-2 tracking-tight" style={{ color: 'var(--nexora-text)' }}>{kpi.value}</div>
+              <div className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>{kpi.label}</div>
             </div>
           )
         })}
       </div>
 
       {/* Collections over time */}
-      <div className="card mb-5">
-        <h2 className="font-semibold text-white mb-1">Collections Over Time</h2>
-        <p className="text-xs text-slate-400 mb-4">Daily collections in the last 7 days</p>
-        <ResponsiveContainer width="100%" height={200}>
+      <div className="card mb-6 shadow-md border-0 ring-1" style={{ ringColor: 'var(--nexora-border)' }}>
+        <h2 className="text-lg font-bold mb-1" style={{ color: 'var(--nexora-text)' }}>Collections Over Time</h2>
+        <p className="text-sm font-medium mb-6" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>Daily collections in the last 7 days</p>
+        <ResponsiveContainer width="100%" height={250}>
           <LineChart data={dailyData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
             <XAxis dataKey="day" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
@@ -151,13 +152,13 @@ export default function Analytics() {
         </ResponsiveContainer>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Waste type pie */}
-        <div className="card">
-          <h2 className="font-semibold text-white mb-1">Collections by Waste Type</h2>
-          <p className="text-xs text-slate-400 mb-4">All time breakdown</p>
+        <div className="card shadow-md border-0 ring-1" style={{ ringColor: 'var(--nexora-border)' }}>
+          <h2 className="text-lg font-bold mb-1" style={{ color: 'var(--nexora-text)' }}>Collections by Waste Type</h2>
+          <p className="text-sm font-medium mb-6" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>All time breakdown</p>
           {wasteTypePie.length > 0 ? (
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie data={wasteTypePie} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={4} dataKey="value">
                   {wasteTypePie.map((entry, index) => (
@@ -169,15 +170,15 @@ export default function Analytics() {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-slate-500 text-sm text-center py-8">No data yet</p>
+            <p className="font-medium text-center py-12" style={{ color: 'var(--nexora-text)', opacity: 0.5 }}>No data yet</p>
           )}
         </div>
 
         {/* Bin fill distribution */}
-        <div className="card">
-          <h2 className="font-semibold text-white mb-1">Bin Fill Distribution</h2>
-          <p className="text-xs text-slate-400 mb-4">Current fill levels across all bins</p>
-          <ResponsiveContainer width="100%" height={200}>
+        <div className="card shadow-md border-0 ring-1" style={{ ringColor: 'var(--nexora-border)' }}>
+          <h2 className="text-lg font-bold mb-1" style={{ color: 'var(--nexora-text)' }}>Bin Fill Distribution</h2>
+          <p className="text-sm font-medium mb-6" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>Current fill levels across all bins</p>
+          <ResponsiveContainer width="100%" height={250}>
             <BarChart data={binFillData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
               <XAxis dataKey="range" tick={{ fill: '#64748b', fontSize: 10 }} axisLine={false} tickLine={false} />

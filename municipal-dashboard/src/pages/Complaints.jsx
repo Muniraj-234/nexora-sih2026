@@ -47,47 +47,46 @@ export default function Complaints() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-white">Complaints</h1>
-          <p className="text-slate-400 text-sm mt-1">{complaints.length} total complaints</p>
+          <p style={{ color: 'var(--nexora-text)', opacity: 0.6 }} className="text-sm font-medium">{complaints.length} total complaints</p>
         </div>
-        <button onClick={fetchComplaints} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-all">
-          <RefreshCw size={16} />
+        <button onClick={fetchComplaints} className="p-2.5 rounded-xl transition-all" style={{ background: 'var(--nexora-card)', border: '1px solid var(--nexora-border)', color: 'var(--nexora-text)' }}>
+          <RefreshCw size={18} />
         </button>
       </div>
 
       {/* Status summary */}
-      <div className="grid grid-cols-3 gap-3 mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
         {[
           { key: 'open', label: 'Open', count: statusCounts.open },
           { key: 'in_progress', label: 'In Progress', count: statusCounts.in_progress },
           { key: 'resolved', label: 'Resolved', count: statusCounts.resolved },
         ].map(s => (
-          <div key={s.key} className="card text-center py-4 cursor-pointer transition-all hover:scale-[1.02]"
+          <div key={s.key} className="card text-center py-6 cursor-pointer transition-transform hover:-translate-y-1 hover:shadow-lg flex flex-col justify-center"
             onClick={() => setFilter(filter === s.key ? 'all' : s.key)}
             style={filter === s.key ? { borderColor: statusColor[s.key], background: `${statusColor[s.key]}10` } : {}}>
-            <div className="text-2xl font-bold" style={{ color: statusColor[s.key] }}>{s.count}</div>
-            <div className="text-xs text-slate-400 mt-1">{s.label}</div>
+            <div className="text-3xl font-extrabold mb-2 tracking-tight" style={{ color: statusColor[s.key] }}>{s.count}</div>
+            <div className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>{s.label}</div>
           </div>
         ))}
       </div>
 
       {/* Search */}
-      <div className="relative mb-4">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-        <input className="input pl-9 w-full" placeholder="Search by description or citizen name..."
+      <div className="relative mb-6">
+        <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 opacity-50" style={{ color: 'var(--nexora-text)' }} />
+        <input className="input pl-11 w-full h-full min-h-[3.5rem]" placeholder="Search by description or citizen name..."
           value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
       {/* Filter tabs */}
-      <div className="flex gap-2 mb-5">
+      <div className="flex flex-wrap gap-3 mb-8">
         {['all', 'open', 'in_progress', 'resolved'].map(f => (
           <button key={f} onClick={() => setFilter(f)}
-            className="px-3 py-1.5 rounded-full text-xs font-semibold capitalize transition-all"
+            className="px-4 py-2 rounded-full text-sm font-semibold capitalize transition-all"
             style={filter === f
-              ? { background: 'linear-gradient(135deg, #10b981, #0d9488)', color: 'white' }
-              : { background: 'var(--nexora-card)', border: '1px solid var(--nexora-border)', color: '#64748b' }}>
+              ? { background: 'var(--nexora-green)', color: 'white', boxShadow: '0 4px 12px rgba(0,214,50,0.2)' }
+              : { background: 'var(--nexora-card)', border: '1px solid var(--nexora-border)', color: 'var(--nexora-text)', opacity: 0.7 }}>
             {f === 'all' ? 'All' : f.replace('_', ' ')}
           </button>
         ))}
@@ -103,40 +102,40 @@ export default function Complaints() {
           <p className="text-slate-400">No complaints found</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {filtered.map(complaint => {
             const Icon = statusIcon[complaint.status] || AlertTriangle
             return (
-              <div key={complaint.id} className="card animate-slide-up">
-                <div className="flex items-start gap-4">
+              <div key={complaint.id} className="card animate-slide-up p-5 transition-colors hover:bg-black/5">
+                <div className="flex items-start gap-5">
                   {/* Photo */}
                   {complaint.photo_url && (
                     <img src={complaint.photo_url} alt="Complaint"
-                      className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
+                      className="w-20 h-20 rounded-xl object-cover flex-shrink-0 border" style={{ borderColor: 'var(--nexora-border)' }}
                       onError={e => e.target.style.display = 'none'} />
                   )}
 
                   <div className="flex-1 min-w-0">
                     {/* Header */}
-                    <div className="flex items-start justify-between gap-2 mb-2">
+                    <div className="flex items-start justify-between gap-3 mb-3">
                       <div>
-                        <div className="font-semibold text-white text-sm">{complaint.users?.name || 'Unknown Citizen'}</div>
+                        <div className="font-bold text-base" style={{ color: 'var(--nexora-text)' }}>{complaint.users?.name || 'Unknown Citizen'}</div>
                         {complaint.users?.phone && (
-                          <div className="text-xs text-slate-400">{complaint.users.phone}</div>
+                          <div className="text-sm font-medium mt-0.5" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>{complaint.users.phone}</div>
                         )}
                       </div>
-                      <span className={`badge badge-${complaint.status} flex-shrink-0`}>
+                      <span className={`badge badge-${complaint.status} flex-shrink-0 px-3 py-1`}>
                         {complaint.status.replace('_', ' ')}
                       </span>
                     </div>
 
                     {/* Description */}
-                    <p className="text-sm text-slate-300 mb-2 leading-relaxed">{complaint.description || 'No description provided'}</p>
+                    <p className="text-base mb-4 leading-relaxed" style={{ color: 'var(--nexora-text)', opacity: 0.8 }}>{complaint.description || 'No description provided'}</p>
 
                     {/* Location + time */}
-                    <div className="flex items-center gap-3 text-xs text-slate-400 mb-3 flex-wrap">
-                      <span>📍 {complaint.lat.toFixed(4)}, {complaint.lng.toFixed(4)}</span>
-                      <span>🕐 {new Date(complaint.created_at).toLocaleString()}</span>
+                    <div className="flex items-center gap-4 text-sm font-medium mb-4 flex-wrap" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>
+                      <span className="flex items-center gap-1.5"><MapPin size={14} /> {complaint.lat.toFixed(4)}, {complaint.lng.toFixed(4)}</span>
+                      <span className="flex items-center gap-1.5"><Clock size={14} /> {new Date(complaint.created_at).toLocaleString()}</span>
                     </div>
 
                     {/* Status actions */}

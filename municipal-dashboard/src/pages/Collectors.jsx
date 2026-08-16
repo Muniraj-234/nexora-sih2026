@@ -104,11 +104,10 @@ export default function Collectors() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Page header */}
-      <div className="flex items-center justify-between mb-6">
+      {/* Page header actions */}
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-white">Collectors</h1>
-          <p className="text-slate-400 text-sm mt-1">{collectors.length} registered collectors</p>
+          <p style={{ color: 'var(--nexora-text)', opacity: 0.6 }} className="text-sm font-medium">{collectors.length} registered collectors</p>
         </div>
         <button
           onClick={() => { setShowModal(true); setFormError(''); setFormSuccess('') }}
@@ -119,29 +118,29 @@ export default function Collectors() {
         </button>
       </div>
 
-      {/* Search */}
-      <div className="relative mb-5">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-        <input
-          className="input pl-9 w-full"
-          placeholder="Search by name or phone..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
-        {[
-          { label: 'Total', value: collectors.length, color: '#60a5fa' },
-          { label: 'On Duty Today', value: routes.length, color: '#34d399' },
-          { label: 'Active GPS', value: routes.filter(r => r.current_lat).length, color: '#fbbf24' },
-        ].map(s => (
-          <div key={s.label} className="card text-center py-4">
-            <div className="text-2xl font-bold" style={{ color: s.color }}>{s.value}</div>
-            <div className="text-xs text-slate-400 mt-1">{s.label}</div>
-          </div>
-        ))}
+      {/* Search & Stats */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <div className="relative lg:col-span-1">
+          <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 opacity-50" style={{ color: 'var(--nexora-text)' }} />
+          <input
+            className="input pl-11 w-full h-full min-h-[4rem]"
+            placeholder="Search name/phone..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="grid grid-cols-3 gap-6 lg:col-span-3">
+          {[
+            { label: 'Total', value: collectors.length, color: '#00d632' },
+            { label: 'On Duty Today', value: routes.length, color: '#3b82f6' },
+            { label: 'Active GPS', value: routes.filter(r => r.current_lat).length, color: '#f97316' },
+          ].map(s => (
+            <div key={s.label} className="card text-center py-6 flex flex-col justify-center transition-transform hover:-translate-y-1 hover:shadow-lg">
+              <div className="text-3xl font-extrabold mb-2 tracking-tight" style={{ color: s.color }}>{s.value}</div>
+              <div className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Collector list */}
@@ -158,12 +157,12 @@ export default function Collectors() {
           </button>
         </div>
       ) : (
-        <div className="grid gap-3">
+        <div className="grid gap-4">
           {filtered.map(collector => {
             const todayRoute = getCollectorRoute(collector.id)
             const isActive = !!todayRoute?.current_lat
             return (
-              <div key={collector.id} className="card flex items-center gap-4">
+              <div key={collector.id} className="card flex items-center gap-6 p-5 transition-colors hover:bg-black/5">
                 {/* Avatar */}
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 text-lg font-bold"
                   style={{ background: 'linear-gradient(135deg, #10b981, #0d9488)' }}>
@@ -204,10 +203,10 @@ export default function Collectors() {
                 {/* GPS position */}
                 {todayRoute?.current_lat && (
                   <div className="text-right hidden sm:block">
-                    <div className="text-xs text-emerald-400 font-mono">
+                    <div className="text-sm font-medium mb-1" style={{ color: '#00d632' }}>
                       {todayRoute.current_lat.toFixed(4)}, {todayRoute.current_lng.toFixed(4)}
                     </div>
-                    <div className="text-xs text-slate-500">Last GPS</div>
+                    <div className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--nexora-text)', opacity: 0.5 }}>Last GPS</div>
                   </div>
                 )}
 

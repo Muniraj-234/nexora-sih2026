@@ -72,48 +72,47 @@ export default function FleetMap() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-white">Live Fleet Map</h1>
-          <p className="text-slate-400 text-sm mt-0.5">Real-time collector positions + bin status</p>
+          <p style={{ color: 'var(--nexora-text)', opacity: 0.6 }} className="text-sm font-medium">Real-time collector positions + bin status</p>
         </div>
-        <div className="flex items-center gap-2">
-          <button onClick={fetchAll} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-all">
-            <RefreshCw size={16} />
+        <div className="flex items-center gap-3">
+          <button onClick={fetchAll} className="p-2.5 rounded-xl transition-all" style={{ background: 'var(--nexora-card)', border: '1px solid var(--nexora-border)', color: 'var(--nexora-text)' }}>
+            <RefreshCw size={18} />
           </button>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium"
-            style={{ background: connected ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)', border: `1px solid ${connected ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`, color: connected ? '#10b981' : '#f87171' }}>
-            {connected ? <Wifi size={12} /> : <WifiOff size={12} />}
-            {connected ? 'Live' : 'Connecting...'}
+          <div className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider"
+            style={{ background: connected ? 'rgba(0,214,50,0.1)' : 'rgba(239,68,68,0.1)', border: `1px solid ${connected ? 'rgba(0,214,50,0.2)' : 'rgba(239,68,68,0.2)'}`, color: connected ? '#00d632' : '#f87171' }}>
+            {connected ? <Wifi size={14} /> : <WifiOff size={14} />}
+            {connected ? 'Live Sync' : 'Connecting...'}
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
         {[
-          { label: 'Active Collectors', value: activeCollectors.length, color: '#34d399' },
-          { label: 'Total Bins', value: bins.length, color: '#60a5fa' },
-          { label: 'Critical Bins', value: criticalBins.length, color: '#f87171' },
+          { label: 'Active Collectors', value: activeCollectors.length, color: '#3b82f6' },
+          { label: 'Total Bins', value: bins.length, color: '#00d632' },
+          { label: 'Critical Bins', value: criticalBins.length, color: '#ef4444' },
         ].map(s => (
-          <div key={s.label} className="card text-center py-3">
-            <div className="text-xl font-bold" style={{ color: s.color }}>{s.value}</div>
-            <div className="text-xs text-slate-400 mt-0.5">{s.label}</div>
+          <div key={s.label} className="card text-center py-6 flex flex-col justify-center transition-transform hover:-translate-y-1 hover:shadow-lg">
+            <div className="text-3xl font-extrabold mb-2 tracking-tight" style={{ color: s.color }}>{s.value}</div>
+            <div className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--nexora-text)', opacity: 0.6 }}>{s.label}</div>
           </div>
         ))}
       </div>
 
-      <div className="flex items-center gap-3 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <button onClick={() => setShowBins(!showBins)}
-          className="text-xs px-3 py-1.5 rounded-lg font-medium transition-all flex items-center gap-1"
+          className="text-sm px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2"
           style={showBins
-            ? { background: 'rgba(16,185,129,0.2)', color: '#10b981', border: '1px solid rgba(16,185,129,0.3)' }
-            : { background: 'var(--nexora-card)', color: '#64748b', border: '1px solid var(--nexora-border)' }}>
-          <Trash2 size={12} /> {showBins ? 'Hide' : 'Show'} Bins
+            ? { background: 'rgba(0,214,50,0.15)', color: '#00d632', border: '1px solid rgba(0,214,50,0.2)' }
+            : { background: 'var(--nexora-card)', color: 'var(--nexora-text)', border: '1px solid var(--nexora-border)' }}>
+          <Trash2 size={16} /> {showBins ? 'Hide Bins' : 'Show Bins'}
         </button>
-        {lastUpdate && <span className="text-xs text-slate-500">Updated: {lastUpdate.toLocaleTimeString()}</span>}
+        {lastUpdate && <span className="text-sm font-medium" style={{ color: 'var(--nexora-text)', opacity: 0.5 }}>Updated: {lastUpdate.toLocaleTimeString()}</span>}
       </div>
 
-      <div style={{ height: '460px' }} className="rounded-2xl overflow-hidden mb-4">
+      <div style={{ height: '500px' }} className="rounded-2xl overflow-hidden mb-6 shadow-lg ring-1" style={{ ringColor: 'var(--nexora-border)' }}>
         <MapContainer center={DEFAULT_CENTER} zoom={14} style={{ height: '100%', width: '100%' }}>
           <TileLayer
             attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
