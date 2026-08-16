@@ -77,7 +77,7 @@ export default function Citizens() {
 
       <div className="relative mb-6">
         <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 opacity-50" style={{ color: 'var(--nexora-text)' }} />
-        <input className="input pl-11 w-full h-full min-h-[3.5rem]" placeholder="Search by name or phone..."
+        <input className="input !pl-11 w-full h-full min-h-[3.5rem]" placeholder="Search by name or phone..."
           value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 

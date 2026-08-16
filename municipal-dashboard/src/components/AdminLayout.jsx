@@ -119,7 +119,7 @@ export default function AdminLayout({ profile }) {
             <h2 className="font-bold text-xl" style={{ color: 'var(--nexora-text)' }}>
               {navItems.find(n => n.path === location.pathname)?.label || 'Dashboard'}
             </h2>
-            <p className="text-sm mt-1" style={{ color: 'var(--nexora-text)', opacity: 0.5 }}>Mumbai Municipal Corporation · Real-time data</p>
+            <p className="text-sm mt-1" style={{ color: 'var(--nexora-text)', opacity: 0.5 }}>Salem Municipal Corporation · Real-time data</p>
           </div>
           <div className="flex items-center gap-5">
             <div className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full"
@@ -141,8 +141,10 @@ export default function AdminLayout({ profile }) {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto p-6 lg:p-8" style={{ background: 'var(--nexora-bg)' }}>
-          <Outlet />
+        <main className="flex-1 overflow-auto p-4 md:p-6 lg:p-8" style={{ background: 'var(--nexora-bg)' }}>
+          <div className="max-w-7xl mx-auto w-full">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

@@ -75,7 +75,7 @@ export default function Complaints() {
       {/* Search */}
       <div className="relative mb-6">
         <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 opacity-50" style={{ color: 'var(--nexora-text)' }} />
-        <input className="input pl-11 w-full h-full min-h-[3.5rem]" placeholder="Search by description or citizen name..."
+        <input className="input !pl-11 w-full h-full min-h-[3.5rem]" placeholder="Search by description or citizen name..."
           value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 

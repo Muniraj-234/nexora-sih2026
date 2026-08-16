@@ -89,6 +89,65 @@ export default function FleetMap() {
         </div>
       </div>
 
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <button onClick={() => setShowBins(!showBins)}
+          className="text-sm px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2"
+          style={showBins
+            ? { background: 'rgba(0,214,50,0.15)', color: '#00d632', border: '1px solid rgba(0,214,50,0.2)' }
+            : { background: 'var(--nexora-card)', color: 'var(--nexora-text)', border: '1px solid var(--nexora-border)' }}>
+          <Trash2 size={16} /> {showBins ? 'Hide Bins' : 'Show Bins'}
+        </button>
+        {lastUpdate && <span className="text-sm font-medium" style={{ color: 'var(--nexora-text)', opacity: 0.5 }}>Updated: {lastUpdate.toLocaleTimeString()}</span>}
+      </div>
+
+      <div style={{ height: '600px' }} className="rounded-2xl overflow-hidden mb-8 shadow-lg ring-1" style={{ ringColor: 'var(--nexora-border)' }}>
+        <MapContainer center={DEFAULT_CENTER} zoom={14} style={{ height: '100%', width: '100%' }}>
+          <TileLayer
+            attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+          />
+          {showBins && bins.map(bin => (
+            <Marker key={bin.id} position={[bin.lat, bin.lng]} icon={getBinIcon(bin.fill_level, bin.type)}>
+              <Popup>
+                <div className="text-sm">
+                  <p className="font-bold capitalize mb-1">{bin.type} Bin</p>
+                  <p className="mb-0.5">Fill Level: <span style={{ color: bin.fill_level > 80 ? '#dc2626' : '#16a34a', fontWeight: 700 }}>{bin.fill_level}%</span></p>
+                  {bin.fill_level > 80 && <p style={{ color: '#dc2626', fontWeight: 600 }} className="mt-1">⚠️ Critical - Needs collection!</p>}
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+          {activeCollectors.map(route => {
+            const hasGps = !!route.current_lat
+            return (
+              <React.Fragment key={route.id}>
+                {hasGps && (
+                  <>
+                    <Marker position={[route.current_lat, route.current_lng]} icon={truckIcon}>
+                      <Popup>
+                        <div className="text-sm">
+                          <p className="font-bold text-base mb-1">{route.users?.name || 'Collector'}</p>
+                          <p className="text-xs font-semibold mb-2" style={{ color: '#00d632' }}>🟢 GPS LIVE / LAST KNOWN</p>
+                          <p className="mb-0.5 font-medium">{route.ordered_bin_ids?.length || 0} stops assigned today</p>
+                          <p className="text-xs text-gray-500 font-mono mt-2 pt-2 border-t">
+                            {route.current_lat.toFixed(4)}, {route.current_lng.toFixed(4)}
+                          </p>
+                        </div>
+                      </Popup>
+                    </Marker>
+                    <Circle
+                      center={[route.current_lat, route.current_lng]}
+                      radius={80}
+                      pathOptions={{ color: '#00d632', fillColor: '#00d632', fillOpacity: 0.1, weight: 1.5 }}
+                    />
+                  </>
+                )}
+              </React.Fragment>
+            )
+          })}
+        </MapContainer>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
         {[
           { label: 'Active Collectors', value: activeCollectors.length, color: '#3b82f6' },
@@ -102,69 +161,21 @@ export default function FleetMap() {
         ))}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <button onClick={() => setShowBins(!showBins)}
-          className="text-sm px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2"
-          style={showBins
-            ? { background: 'rgba(0,214,50,0.15)', color: '#00d632', border: '1px solid rgba(0,214,50,0.2)' }
-            : { background: 'var(--nexora-card)', color: 'var(--nexora-text)', border: '1px solid var(--nexora-border)' }}>
-          <Trash2 size={16} /> {showBins ? 'Hide Bins' : 'Show Bins'}
-        </button>
-        {lastUpdate && <span className="text-sm font-medium" style={{ color: 'var(--nexora-text)', opacity: 0.5 }}>Updated: {lastUpdate.toLocaleTimeString()}</span>}
-      </div>
-
-      <div style={{ height: '500px' }} className="rounded-2xl overflow-hidden mb-6 shadow-lg ring-1" style={{ ringColor: 'var(--nexora-border)' }}>
-        <MapContainer center={DEFAULT_CENTER} zoom={14} style={{ height: '100%', width: '100%' }}>
-          <TileLayer
-            attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-          />
-          {showBins && bins.map(bin => (
-            <Marker key={bin.id} position={[bin.lat, bin.lng]} icon={getBinIcon(bin.fill_level, bin.type)}>
-              <Popup>
-                <div className="text-sm">
-                  <p className="font-bold capitalize">{bin.type} Bin</p>
-                  <p>Fill: <span style={{ color: bin.fill_level > 80 ? '#dc2626' : '#16a34a', fontWeight: 600 }}>{bin.fill_level}%</span></p>
-                  {bin.fill_level > 80 && <p style={{ color: '#dc2626' }}>⚠️ Needs collection!</p>}
-                </div>
-              </Popup>
-            </Marker>
-          ))}
-          {activeCollectors.map(route => (
-            <React.Fragment key={route.id}>
-              <Marker position={[route.current_lat, route.current_lng]} icon={truckIcon}>
-                <Popup>
-                  <div className="text-sm">
-                    <p className="font-bold">{route.users?.name || 'Collector'}</p>
-                    <p>{route.ordered_bin_ids?.length || 0} stops today</p>
-                    <p className="text-xs text-gray-500">
-                      {route.current_lat.toFixed(4)}, {route.current_lng.toFixed(4)}
-                    </p>
-                  </div>
-                </Popup>
-              </Marker>
-              <Circle
-                center={[route.current_lat, route.current_lng]}
-                radius={80}
-                pathOptions={{ color: '#10b981', fillColor: '#10b981', fillOpacity: 0.08, weight: 1 }}
-              />
-            </React.Fragment>
-          ))}
-        </MapContainer>
-      </div>
-
       {criticalBins.length > 0 && (
-        <div className="card" style={{ borderColor: 'rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.05)' }}>
-          <h3 className="text-sm font-semibold mb-3" style={{ color: '#f87171' }}>
-            ⚠️ Critical Bins — {criticalBins.length} need immediate collection
+        <div className="card shadow-md" style={{ borderColor: 'rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.02)' }}>
+          <h3 className="text-base font-bold mb-4 flex items-center gap-2" style={{ color: '#ef4444' }}>
+            <Trash2 size={18} /> Critical Bins — {criticalBins.length} need immediate collection
           </h3>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {criticalBins.map(bin => (
-              <div key={bin.id} className="flex items-center gap-2 text-xs p-2 rounded-lg"
-                style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                  style={{ background: '#f87171', color: 'white' }}>{bin.fill_level}%</div>
-                <span className="text-slate-300 capitalize">{bin.type} bin</span>
+              <div key={bin.id} className="flex items-center gap-3 p-3 rounded-xl transition-transform hover:-translate-y-0.5"
+                style={{ background: 'var(--nexora-card)', border: '1px solid rgba(239,68,68,0.2)', boxShadow: '0 2px 4px rgba(239,68,68,0.05)' }}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow-sm"
+                  style={{ background: '#ef4444', color: 'white' }}>{bin.fill_level}%</div>
+                <div>
+                  <div className="font-semibold capitalize text-sm" style={{ color: 'var(--nexora-text)' }}>{bin.type} bin</div>
+                  <div className="text-xs mt-0.5" style={{ color: 'var(--nexora-text)', opacity: 0.5 }}>Requires pickup</div>
+                </div>
               </div>
             ))}
           </div>
