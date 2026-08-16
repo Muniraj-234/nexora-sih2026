@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { Building2, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Building2, Mail, Lock, Eye, EyeOff, Sun, Moon } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
 
 export default function Login() {
+  const { theme, toggleTheme } = useTheme()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)
@@ -40,6 +42,9 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-12 relative overflow-hidden" style={{ background: 'var(--nexora-bg)' }}>
+      <button onClick={toggleTheme} className="absolute top-6 right-6 p-2 rounded-full hover:bg-black/5 z-50 transition-colors" style={{ color: 'var(--nexora-text)' }}>
+        {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
+      </button>
       <div className="w-full max-w-md animate-slide-up z-10">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 shadow-lg shadow-emerald-500/30" style={{ background: 'var(--nexora-green)' }}>

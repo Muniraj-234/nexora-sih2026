@@ -100,7 +100,7 @@ export default function FleetMap() {
         {lastUpdate && <span className="text-sm font-medium" style={{ color: 'var(--nexora-text)', opacity: 0.5 }}>Updated: {lastUpdate.toLocaleTimeString()}</span>}
       </div>
 
-      <div style={{ height: '600px' }} className="rounded-2xl overflow-hidden mb-8 shadow-lg ring-1" style={{ ringColor: 'var(--nexora-border)' }}>
+      <div className="rounded-2xl overflow-hidden mb-8 shadow-lg ring-1" style={{ height: '600px', '--tw-ring-color': 'var(--nexora-border)' }}>
         <MapContainer center={DEFAULT_CENTER} zoom={14} style={{ height: '100%', width: '100%' }}>
           <TileLayer
             attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
